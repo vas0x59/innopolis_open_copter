@@ -56,15 +56,17 @@ SPEED = 0.3  # rad / s
 
 
 start_stamp = rospy.get_rostime()
-
+circle_done=0
 r = rospy.Rate(10)
 led.setPixelsColor(led_colors["rec"])
 while not rospy.is_shutdown():
     angle = (rospy.get_rostime() - start_stamp).to_sec() * SPEED
     x = circle_center[0] + math.sin(angle) * RADIUS
     y = circle_center[1] + math.cos(angle) * RADIUS
-    set_position(x=x, y=y, z=start.z)
-
+    set_position(x=x, y=y, z=start.z, yaw=angle+90)
+    if ((x>=1.5 and x<=1.6) and (y>=2.5 and y<=2.6)) and circle_done==1:
+        break
+    circle_done=1
     r.sleep()
 
 
