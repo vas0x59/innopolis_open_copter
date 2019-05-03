@@ -3,7 +3,7 @@ import time
 
 led = Leds(36)
 
-led.setPixelsColor(100, 100, 0)
+led.setPixelsColor(200, 0, 200)
 
 time.sleep(2)
 
