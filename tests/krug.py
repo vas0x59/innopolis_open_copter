@@ -11,7 +11,7 @@ import time
 
 led = Leds(36)
 led_colors = {"takeoff":Color(0,0,0), "wait":Color(0,0,0), "rec":Color(0,0,0), "land":Color(0,0,0)}
-start_coord = [1.5, 1.5]
+start_coord = [1, 1]
 circle_center = [1.5, 1.5]
 
 rospy.init_node('flight')
