@@ -17,20 +17,20 @@ class Leds:
         LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
         LED_CHANNEL    = 0       # Set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-        strip = Adafruit_NeoPixel(self.LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT)
-        strip.begin()
+        self.strip = Adafruit_NeoPixel(self.LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT)
+        self.strip.begin()
     def setPixelsColor(self, r, g, b):
-        for i in range(strip.numPixels()):
-            strip.setPixelColorRGB(i, r, g, b)
-        strip.show()
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColorRGB(i, r, g, b)
+        self.strip.show()
 
     def setPixelColor(self, r, g, b):
-        strip.setPixelColorRGB(i, r, g, b)
-        strip.show()
+        self.strip.setPixelColorRGB(i, r, g, b)
+        self.strip.show()
 
     def colorWipe(self, r, g, b, wait_ms=50):
         """Wipe color across display a pixel at a time."""
-        for i in range(strip.numPixels()):
-            strip.setPixelColorRGB(i, r, g, b)
-            strip.show()
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColorRGB(i, r, g, b)
+            self.strip.show()
             time.sleep(wait_ms/1000.0)
