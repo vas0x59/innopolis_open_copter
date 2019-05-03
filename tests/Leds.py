@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import time
-import rospy
 from rpi_ws281x import Adafruit_NeoPixel
 from rpi_ws281x import Color
 
 class Leds:
-    def __init__(self, count, pin, br):
+    def __init__(self, count, pin=21, br=100):
         """
         LEDs
         """
@@ -18,7 +19,7 @@ class Leds:
 
         strip = Adafruit_NeoPixel(self.LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT)
         strip.begin()
-    def fillStrip(self, r, g, b):
+    def setPixelsColor(self, r, g, b):
         for i in range(strip.numPixels()):
             strip.setPixelColorRGB(i, r, g, b)
         strip.show()
@@ -32,4 +33,4 @@ class Leds:
         for i in range(strip.numPixels()):
             strip.setPixelColorRGB(i, r, g, b)
             strip.show()
-            rospy.sleep(wait_ms/1000.0)
+            time.sleep(wait_ms/1000.0)
