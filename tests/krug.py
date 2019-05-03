@@ -4,6 +4,16 @@ import rospy
 from clever import srv
 from std_srvs.srv import Trigger
 import math
+
+from Leds import Leds
+from rpi_ws281x import Color
+import time
+
+led = Leds(36)
+led_colors = {"takeoff":Color(0,0,0), "wait":Color(0,0,0), "rec":Color(0,0,0), "land":Color(0,0,0)}
+start_coord = [1.5, 1.5]
+circle_center = [1.5, 1.5]
+
 rospy.init_node('flight')
 
 get_telemetry = rospy.ServiceProxy('get_telemetry', srv.GetTelemetry)
@@ -31,11 +41,15 @@ def navigate_wait(x=0, y=0, z=0, speed=0, frame_id='', auto_arm=False, tolerance
 
 
 z = 1.5
+led.setPixelsColor(led_colors["takeoff"])
 navigate(x=0, y=0, z=z, speed=0.8, frame_id="body", auto_arm=True)
 rospy.sleep(3)
-circle_center = [1.5, 1.5]
 
-navigate_wait(x=0, y=0, z=z, speed=0.5, frame_id="aruco_map")
+
+navigate_wait(x=start_coord[0], y=start_coord[1], z=z, speed=0.5, frame_id="aruco_map")
+led.setPixelsColor(led_colors["wait"])
+rospy.sleep(3)
+
 
 RADIUS = 1   # m
 SPEED = 0.3  # rad / s
@@ -44,7 +58,7 @@ SPEED = 0.3  # rad / s
 start_stamp = rospy.get_rostime()
 
 r = rospy.Rate(10)
-
+led.setPixelsColor(led_colors["rec"])
 while not rospy.is_shutdown():
     angle = (rospy.get_rostime() - start_stamp).to_sec() * SPEED
     x = circle_center[0] + math.sin(angle) * RADIUS
@@ -54,7 +68,15 @@ while not rospy.is_shutdown():
     r.sleep()
 
 
+navigate_wait(x=start_coord[0], y=start_coord[1], z=z, speed=0.5, frame_id="aruco_map")
+led.setPixelsColor(led_colors["wait"])
+rospy.sleep(2)
+led.setPixelsColor(led_colors["land"])
+land()
 
+rospy.sleep(4)
+arming(False)
+led.setPixelsColor(Color(0, 0, 0))
 
 
 

@@ -19,18 +19,18 @@ class Leds:
 
         self.strip = Adafruit_NeoPixel(self.LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT)
         self.strip.begin()
-    def setPixelsColor(self, r, g, b):
+    def setPixelsColor(self, color):
         for i in range(self.strip.numPixels()):
-            self.strip.setPixelColorRGB(i, r, g, b)
+            self.strip.setPixelColor(i, v)
         self.strip.show()
 
-    def setPixelColor(self, r, g, b):
-        self.strip.setPixelColorRGB(i, r, g, b)
+    def setPixelColor(self, color):
+        self.strip.setPixelColor(i, color)
         self.strip.show()
 
-    def colorWipe(self, r, g, b, wait_ms=50):
+    def colorWipe(self, color, wait_ms=50):
         """Wipe color across display a pixel at a time."""
         for i in range(self.strip.numPixels()):
-            self.strip.setPixelColorRGB(i, r, g, b)
+            self.strip.setPixelColor(i, color)
             self.strip.show()
             time.sleep(wait_ms/1000.0)
