@@ -10,7 +10,7 @@ led = Leds(36)
 get_telemetry = rospy.ServiceProxy('get_telemetry', srv.GetTelemetry)
 print(get_telemetry(frame_id="body"))
 
-led_colors = {"takeoff":Color(200,0,200), "wait":Color(150,200,0), "rec":Color(0,0,0), "land":Color(200,120,0)}
+led_colors = {"takeoff":Color(200,0,200), "wait":Color(150,220,0), "rec":Color(0,0,0), "land":Color(220,110,0)}
 
 led.setPixelsColor(led_colors["takeoff"])
 
