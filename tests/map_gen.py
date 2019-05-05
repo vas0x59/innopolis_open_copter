@@ -1,4 +1,3 @@
-import argparse
 st = [96, 97, 98, 67, 68, 36, 37, 38]
 co = 8
 map_arr = []
