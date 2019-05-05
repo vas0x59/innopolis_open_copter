@@ -32,8 +32,8 @@ def get_distance(x1, y1, z1, x2, y2, z2):
     return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2)
 
 
-def navigate_wait(x=0, y=0, z=0, speed=0, frame_id='aruco_map', auto_arm=False, tolerance=0.2):
-    navigate(x=x, y=y, z=z, speed=speed, frame_id=frame_id, auto_arm=auto_arm)
+def navigate_wait(x=0, y=0, z=0, speed=0, frame_id='aruco_map', auto_arm=False, tolerance=0.2, yaw=float('nan')):
+    navigate(x=x, y=y, z=z, yaw=yaw, speed=speed, frame_id=frame_id, auto_arm=auto_arm)
     while True:
         telem = get_telemetry(frame_id=frame_id)
         # Вычисляем расстояние до заданной точки
@@ -52,16 +52,11 @@ tolerance = 0.2
 start = get_telemetry()
 
 navigate(z=z, speed=0.56, frame_id="body", auto_arm=True)
-while True:
-    # Проверяем текущую высоту
-    if get_telemetry().z - start.z + z < tolerance:
-        # Взлет завершен
-        break
-    rospy.sleep(0.2)
-rospy.sleep(0.1)
+
+rospy.sleep(2.8)
 
 print("go to wait point")
-navigate_wait(x=start_coord[0], y=start_coord[1], z=z, speed=0.5, frame_id="aruco_map")
+navigate_wait(x=start_coord[0], y=start_coord[1], z=z, speed=0.5, frame_id="aruco_map", yaw=float('nan'))
 led.setPixelsColor(led_colors["wait"])
 
 print("wait")
