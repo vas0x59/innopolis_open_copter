@@ -10,7 +10,7 @@ from rpi_ws281x import Color
 import time
 
 led = Leds(36)
-led_colors = {"takeoff":Color(200,0,200), "wait":Color(0,70,140), "rec":Color(225,70,10), "land":Color(225,90,0)}
+led_colors = {"takeoff":Color(200,0,200), "wait":Color(0,90,140), "rec":Color(225,50,5), "land":Color(225,90,0)}
 start_coord = [0.3, 0.3]
 
 
