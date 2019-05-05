@@ -43,7 +43,7 @@ def navigate_wait(x=0, y=0, z=0, speed=0, frame_id='aruco_map', auto_arm=False, 
         rospy.sleep(0.2)
 
 
-z = 1.2
+z = 1
 
 led.setPixelsColor(led_colors["takeoff"])
 print("takeoff")
@@ -53,7 +53,9 @@ start = get_telemetry()
 
 navigate(z=z, speed=0.56, frame_id="body", auto_arm=True)
 
-rospy.sleep(2.8)
+rospy.sleep(2)
+
+z = 1.3
 
 print("go to wait point")
 navigate_wait(x=start_coord[0], y=start_coord[1], z=z, speed=0.5, frame_id="aruco_map", yaw=float('nan'))
@@ -66,7 +68,7 @@ led.setPixelsColor(led_colors["land"])
 print("land")
 land()
 
-rospy.sleep(4)
+rospy.sleep(3)
 print("disarm")
 arming(False)
 led.setPixelsColor(Color(0, 0, 0))
