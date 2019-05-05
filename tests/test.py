@@ -11,7 +11,7 @@ import time
 
 led = Leds(36)
 led_colors = {"takeoff":Color(200,0,200), "wait":Color(140,220,0), "rec":Color(0,0,0), "land":Color(225,90,0)}
-start_coord = [1.5, 1.5]
+start_coord = [0.5, 0.5]
 
 
 rospy.init_node('flight')
@@ -43,17 +43,31 @@ def navigate_wait(x=0, y=0, z=0, speed=0, frame_id='', auto_arm=False, tolerance
         rospy.sleep(0.2)
 
 
-z = 1.5
-led.setPixelsColor(led_colors["takeoff"])
-navigate(x=0, y=0, z=z, speed=0.8, frame_id="body", auto_arm=True)
-rospy.sleep(3)
+z = 1.2
 
+led.setPixelsColor(led_colors["takeoff"])
+print("takeoff")
+navigate(x=0, y=0, z=z, speed=0.56, frame_id="body", auto_arm=True)
+while True:
+    # Проверяем текущую высоту
+    if get_telemetry().z - start.z + z < tolerance:
+        # Взлет завершен
+        break
+    rospy.sleep(0.2)
+rospy.sleep(0.1)
+
+print("go to wait point")
 navigate_wait(x=start_coord[0], y=start_coord[1], z=z, speed=0.5, frame_id="aruco_map")
 led.setPixelsColor(led_colors["wait"])
+
+print("wait")
 rospy.sleep(5.5)
+
 led.setPixelsColor(led_colors["land"])
+print("land")
 land()
 
 rospy.sleep(4)
+print("disarm")
 arming(False)
 led.setPixelsColor(Color(0, 0, 0))
