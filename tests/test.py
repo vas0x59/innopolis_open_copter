@@ -68,7 +68,7 @@ led.setPixelsColor(led_colors["land"])
 print("land")
 land()
 
-rospy.sleep(3)
+rospy.sleep(4)
 print("disarm")
 arming(False)
 led.setPixelsColor(Color(0, 0, 0))
