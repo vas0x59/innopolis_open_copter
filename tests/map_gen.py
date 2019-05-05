@@ -1,6 +1,6 @@
 st = [96, 97, 98, 67, 68, 36, 37, 38]
 co = 8
-map_arr = [st.copy()]
+map_arr = []
 mark_size = 0.223
 mark_sep = 0.3
 
