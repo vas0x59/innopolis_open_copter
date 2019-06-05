@@ -17,7 +17,7 @@ def test_a(a):
         return math.pi*2 + a
     return a
 
-circle_center = [1.25, 1.15]
+circle_center = [1.15, 1.15]
 def circle(c,r,n):
     a = []
     for i in np.arange(0, 361, 360/n):
@@ -26,7 +26,7 @@ def circle(c,r,n):
         yaw = -round(test_a(math.atan2(math.cos(math.radians(i)), math.sin(math.radians(i))) - math.pi/2), 2)
         a.append([x, y, yaw])
     return a
-points = circle(circle_center,0.9,30)
+points = circle(circle_center,1.1,40)
 led = Leds(36)
 
 led_colors = {"takeoff":Color(200,0,200), "wait":Color(0,90,140), "rec":Color(225,50,5), "land":Color(225,90,0)}
@@ -62,32 +62,32 @@ def navigate_wait(x=0, y=0, z=0, speed=0, frame_id='aruco_map', auto_arm=False, 
             break
         rospy.sleep(0.2)
 #hovering
-z = 1
+z = 0.8
 led.setPixelsColor(led_colors["takeoff"])
 print("takeoff")
 tolerance = 0.2
 start = get_telemetry()
 navigate(z=z, speed=0.56, frame_id="body", auto_arm=True)
 rospy.sleep(1.8)
-z = 1.3
+z = 1.2
 print("go to wait point")
 navigate_wait(x=start_coord[0], y=start_coord[1], z=z, speed=0.5, frame_id="aruco_map", yaw=float('nan'))
 led.setPixelsColor(led_colors["wait"])
 print("wait")
-rospy.sleep(6)
+rospy.sleep(9)
 
-z = 1
+z = 1.1
 
 print("start rec")
 
 navigate_wait(x=start_coord[0], y=start_coord[1], z=z, speed=0.5, frame_id="aruco_map")
 led.setPixelsColor(led_colors["wait"])
 
-rospy.sleep(2)
+rospy.sleep(1)
 led.setPixelsColor(led_colors["rec"])
-navigate_wait(x=start_coord[0], y=start_coord[1], z=z+1, speed=0.5, frame_id="aruco_map")
+navigate_wait(x=start_coord[0], y=start_coord[1], z=z+1.1, speed=0.5, frame_id="aruco_map")
 
-navigate_wait(x=start_coord[0]+1, y=start_coord[1], z=z+1, speed=0.5, frame_id="aruco_map")
+navigate_wait(x=start_coord[0]+1, y=start_coord[1], z=z+1.1, speed=0.5, frame_id="aruco_map")
 
 navigate_wait(x=start_coord[0]+1, y=start_coord[1], z=z, speed=0.5, frame_id="aruco_map")
 
@@ -98,7 +98,7 @@ rospy.sleep(2)
 
 start_coord = [1.8, 1]
 
-z = 1
+z = 1.4
 
 print("start circle")
 
@@ -112,9 +112,12 @@ circle_done=0
 angle = 0
 led.setPixelsColor(led_colors["rec"])
 
-for i in points:
-	navigate_wait(x=i[0], y=i[1], z=z, speed=0.6, frame_id="aruco_map",yaw=round(i[2],2)-math.pi)
+rate1 = rospy.Rate(10)
 
+for i in points:
+	#navigate_wait(x=i[0], y=i[1], z=z, speed=0.6, frame_id="aruco_map",yaw=round(i[2],2)-math.pi)
+	set_position(x=i[0],y=i[1],z=z, frame_id="aruco_map", yaw=round(i[2],2)-math.pi)
+	rospy.sleep(0.3)
 navigate_wait(x=start_coord[0], y=start_coord[1], z=z, speed=0.5, frame_id="aruco_map")
 led.setPixelsColor(led_colors["wait"])
 rospy.sleep(2)
