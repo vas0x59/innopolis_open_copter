@@ -7,15 +7,15 @@ import time
 
 import Utils
 magnit = Utils.Magnet()
-# magnit.off()
+magnit.off()
 
 copter = Utils.Copter(markers_flipped=True)
 copter.zero_z()
 
 copter.takeoff(1.5)
 
-time.sleep(5)
-magnit.off()
+time.sleep(2)
+# magnit.off()
 
 copter.land()
 # copter.go_to_point((0, 0, 1.8))
