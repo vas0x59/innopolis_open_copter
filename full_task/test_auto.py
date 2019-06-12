@@ -7,7 +7,7 @@ import time
 
 import Utils
 
-points = {"takeoff":(2.76, 1.5, 1.3), "land": (0.33, 1.5, 1.3)}
+points = {"takeoff":(2.3, 2, 1.3), "land": (0.27, 2.05, 1.3)}
 
 magnit = Utils.Magnet()
 magnit.off()
