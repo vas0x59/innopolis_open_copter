@@ -34,7 +34,7 @@ class Copter:
         self.arming = rospy.ServiceProxy('mavros/cmd/arming', CommandBool)
         self.zero_z = 2
         self.markers_flipped = markers_flipped
-        self.start_coord = (0, 0)
+        self.start_coord = (0, 0, 1.5)
         # self.tolerance = 0.2
     def get_distance(self, x1, y1, z1, x2, y2, z2):
         return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2)
@@ -66,9 +66,10 @@ class Copter:
             return self.navigate(x=x, y=y, z=z, yaw=yaw, speed=speed, frame_id='aruco_map')
 
     def takeoff(self, z):
+        telem = self.get_telemetry_aruco()
         self.navigate(z=z, speed=0.56, frame_id="body", auto_arm=True)
         rospy.sleep(1.8)
-        self.navigate_aruco(x=self.start_coord[0], y=self.start_coord[1], z=z, speed=0.5)
+        self.navigate_aruco(x=telem.x, y=telem.y, z=z, speed=0.5)
 
     def go_to_point(self, point, yaw=float('nan'), speed=0.5, tolerance=0.2):
         self.navigate_aruco(x=point[0], y=point[1], z=point[2], yaw=yaw, speed=speed)
@@ -80,6 +81,6 @@ class Copter:
             rospy.sleep(0.2)
     def land(self):
         self.land()
-        time.sleep(5)
+        rospy.sleep(5)
         self.arming(False)
 
