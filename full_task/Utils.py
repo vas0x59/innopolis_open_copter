@@ -4,19 +4,21 @@ from std_srvs.srv import Trigger
 from mavros_msgs.srv import CommandBool
 import math
 import time
+import pigpio
+from rpi_ws281x import Color
 
 led_colors = {"takeoff":Color(200,0,200), "wait":Color(0,90,140), "rec":Color(225,50,5), "land":Color(225,90,0)}
 
 class Magnet:
     def __init__(self, pin=22):
-        pi = pigpio.pi()
+        self.pi = pigpio.pi()
         self._pin = pin
-        pi.set_mode(self._pin, pigpio.OUTPUT)
+        self.pi.set_mode(self._pin, pigpio.OUTPUT)
         # pi.write(self._pin, 0)
     def on(self):
-        pi.write(self._pin, 1)
+        self.pi.write(self._pin, 1)
     def off(self):
-        pi.write(self._pin, 0)
+        self.pi.write(self._pin, 0)
 
 class Copter:
     def __init__(self, markers_flipped=False):
@@ -61,21 +63,19 @@ class Copter:
         if self.markers_flipped == True:
             return self.navigate(x=x, y=y, z=self.zero_z-z, yaw=yaw, speed=speed, frame_id='aruco_map')
         else:
-            return telem
+            return self.navigate(x=x, y=y, z=z, yaw=yaw, speed=speed, frame_id='aruco_map')
 
     def takeoff(self, z):
         self.navigate(z=z, speed=0.56, frame_id="body", auto_arm=True)
         rospy.sleep(1.8)
-        self.navigate_aruco(x=start_coord[0], y=start_coord[1], z=z, speed=0.5)
+        self.navigate_aruco(x=self.start_coord[0], y=self.start_coord[1], z=z, speed=0.5)
 
     def go_to_point(self, point, yaw=float('nan'), speed=0.5, tolerance=0.2):
         self.navigate_aruco(x=point[0], y=point[1], z=point[2], yaw=yaw, speed=speed)
         
         while True:
-            telem = self.get_telemetry(frame_id=frame_id)
-            # Вычисляем расстояние до заданной точки
-            if self.get_distance(x, y, z, telem.x, telem.y, telem.z) < tolerance:
-                # Долетели до необходимой точки
+            telem = self.get_telemetry_aruco()
+            if self.get_distance(point[0], point[1], point[2], telem.x, telem.y, telem.z) < tolerance:
                 break
             rospy.sleep(0.2)
     def land(self):
