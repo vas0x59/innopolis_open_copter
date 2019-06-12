@@ -30,7 +30,7 @@ class Copter:
         self.set_velocity = rospy.ServiceProxy('set_velocity', srv.SetVelocity)
         self.set_attitude = rospy.ServiceProxy('set_attitude', srv.SetAttitude)
         self.set_rates = rospy.ServiceProxy('set_rates', srv.SetRates)
-        self.land = rospy.ServiceProxy('land', Trigger)
+        self.land_serv = rospy.ServiceProxy('land', Trigger)
         self.arming = rospy.ServiceProxy('mavros/cmd/arming', CommandBool)
         self.zero_z = 2
         self.markers_flipped = markers_flipped
@@ -38,7 +38,7 @@ class Copter:
         # self.tolerance = 0.2
     def get_distance(self, x1, y1, z1, x2, y2, z2):
         return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2)
-    def zero_z(self):
+    def callib_zero_z(self):
         """
         Zero floor level
         """
@@ -49,6 +49,7 @@ class Copter:
             zz += telem.z
             rospy.sleep(0.15)
         self.zero_z = zz/10
+        print("zero_z", self.zero_z)
         
 
     def get_telemetry_aruco(self):
@@ -71,16 +72,16 @@ class Copter:
         rospy.sleep(1.8)
         self.navigate_aruco(x=telem.x, y=telem.y, z=z, speed=0.5)
 
-    def go_to_point(self, point, yaw=float('nan'), speed=0.5, tolerance=0.2):
+    def go_to_point(self, point, yaw=float('nan'), speed=0.5, tolerance=0.6):
         self.navigate_aruco(x=point[0], y=point[1], z=point[2], yaw=yaw, speed=speed)
-        
         while True:
             telem = self.get_telemetry_aruco()
+            print(self.get_distance(point[0], point[1], point[2], telem.x, telem.y, telem.z))
             if self.get_distance(point[0], point[1], point[2], telem.x, telem.y, telem.z) < tolerance:
                 break
             rospy.sleep(0.2)
     def land(self):
-        self.land()
+        self.land_serv()
         rospy.sleep(5)
         self.arming(False)
 
