@@ -7,7 +7,7 @@ import time
 
 import Utils
 
-points = {"takeoff":(0, 0, 1.5), "land": (1, 0, 1.5)}
+points = {"takeoff":(2.76, 2, 1.5), "land": (0.33, 2, 1.5)}
 
 magnit = Utils.Magnet()
 magnit.off()
@@ -21,9 +21,9 @@ rospy.sleep(0.5)
 
 
 copter.go_to_point(points["takeoff"])
-rospy.sleep(5)
+rospy.sleep(3)
 copter.go_to_point(points["land"])
-
+rospy.sleep(3)
 # magnit.off()
 
 copter.land()
