@@ -16,7 +16,7 @@ class Magnet:
     def on(self):
         pi.write(self._pin, 1)
     def off(self):
-        pi.write(self._pin, 1)
+        pi.write(self._pin, 0)
 
 class Copter:
     def __init__(self, markers_flipped=False):
