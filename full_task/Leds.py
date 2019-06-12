@@ -24,7 +24,7 @@ class Leds:
             self.strip.setPixelColor(i, color)
         self.strip.show()
 
-    def setPixelColor(self, color):
+    def setPixelColor(self, color, i):
         self.strip.setPixelColor(i, color)
         self.strip.show()
 
