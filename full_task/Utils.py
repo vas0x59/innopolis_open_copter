@@ -44,7 +44,7 @@ class Copter:
         self.set_rates = rospy.ServiceProxy('set_rates', srv.SetRates)
         self.land_serv = rospy.ServiceProxy('land', Trigger)
         self.arming = rospy.ServiceProxy('mavros/cmd/arming', CommandBool)
-        self.zero_z = 2
+        self.zero_z = 2.5
         self.markers_flipped = markers_flipped
         self.start_coord = (0, 0, 1.5)
         # self.tolerance = 0.2
