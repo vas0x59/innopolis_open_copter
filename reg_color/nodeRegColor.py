@@ -11,13 +11,14 @@ rospy.init_node('regColor')
 # image_pub = rospy.Publisher("image_topic_2",Image)
 def callback(data):
     try:
-      cv_image = bridge.imgmsg_to_cv2(data, "bgr8")
+        cv_image = bridge.imgmsg_to_cv2(data, "bgr8")
     except CvBridgeError as e:
-      print(e)
+        print(e)
+    
+    # (rows,cols,channels) = cv_image.shape
+    # cv2.imshow("Image window", cv_image)
+    # cv2.waitKey(3)
 
-    (rows,cols,channels) = cv_image.shape
-    cv2.imshow("Image window", cv_image)
-    cv2.waitKey(3)
 bridge = CvBridge()
 image_sub = rospy.Subscriber("image_topic",Image,callback)
 
