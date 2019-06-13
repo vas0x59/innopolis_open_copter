@@ -84,14 +84,14 @@ class Copter:
         rospy.sleep(1.8)
         self.navigate_aruco(x=telem.x, y=telem.y, z=z, speed=0.5)
 
-    def go_to_point(self, point, yaw=float('nan'), speed=0.5, tolerance=0.175):
+    def go_to_point(self, point, yaw=float('nan'), speed=0.5, tolerance=0.218): #0.185
         self.navigate_aruco(x=point[0], y=point[1], z=point[2], yaw=yaw, speed=speed)
         while True:
             telem = self.get_telemetry_aruco()
             print(self.get_distance(point[0], point[1], point[2], telem.x, telem.y, telem.z))
             if self.get_distance(point[0], point[1], point[2], telem.x, telem.y, telem.z) < tolerance:
                 break
-            rospy.sleep(0.17)
+            rospy.sleep(0.15)
     def land(self):
         self.land_serv()
         rospy.sleep(5)
