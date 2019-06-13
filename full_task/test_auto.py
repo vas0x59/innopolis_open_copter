@@ -14,7 +14,8 @@ magnit.off()
 
 copter = Utils.Copter(markers_flipped=True)
 copter.start_coord = points["takeoff"]
-copter.callib_zero_z()
+copter.zero_z = 2.5
+# copter.callib_zero_z()
 
 copter.takeoff(1.5)
 print("takeoff compl")
