@@ -6,6 +6,7 @@ import math
 import time
 import pigpio
 from rpi_ws281x import Color
+from std_msgs.msg import String
 
 led_colors = {"takeoff":Color(200,0,200), "wait":Color(0,90,140), "rec":Color(225,50,5), "land":Color(225,90,0)}
 
@@ -20,9 +21,20 @@ class Magnet:
     def off(self):
         self.pi.write(self._pin, 0)
 
+# class RosTools:
+#     def __init__(self, node_name="flight"):
+#         rospy.init_node(node_name)
+#         self.node_name = node_name
+
+class ColorReg:
+    def __init__(self, topic="/reg_color"):
+        self.sub = rospy.Subscriber(topic, String, self._callback)
+        self.color = "none"
+    def _callback(self, msg):
+        self.color = msg.data
+
 class Copter:
     def __init__(self, markers_flipped=False):
-        rospy.init_node('flight')
         self.get_telemetry = rospy.ServiceProxy('get_telemetry', srv.GetTelemetry)
         self.navigate = rospy.ServiceProxy('navigate', srv.Navigate)
         self.navigate_global = rospy.ServiceProxy('navigate_global', srv.NavigateGlobal)
@@ -42,7 +54,7 @@ class Copter:
         """
         Zero floor level
         """
-        
+
         zz = 0
         for i in range(10):
             telem = self.get_telemetry(frame_id="aruco_map")
