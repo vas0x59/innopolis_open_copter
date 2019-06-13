@@ -96,7 +96,7 @@ def monitoring():
 # copter.callib_zero_z()
 
 takeoff()
-ring()
-gate()
+# ring()
+# gate()
 land()
 copter.arming(False)
