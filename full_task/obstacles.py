@@ -7,10 +7,10 @@ import time
 import Utils
 
 points = {
-    "takeoff":(2.3, 2, 1.3),
+    "takeoff":(2.3, 1.85, 1.3),
     # "ring":(2.8, 1.4, 0.5),
     # "gate":(1.9, 0.5, 0.5),
-    "land": (0.27, 2.05, 1.3)
+    "land": (0.4, 1.85, 1.3)
 }
 gate_points = {
     "gate_1":(2.2, 0.5, 0.5),
@@ -21,8 +21,8 @@ grab_points = {
     # "grab":(1, 1, 0.4)
 }
 ring_points = {
-    "ring_1":(2.8, 1.7, 0.5),
-    "ring_2":(2.8, 0.8, 0.5)
+    "ring_1":(2.8, 1.7, 0.35),
+    "ring_2":(2.8, 0.5, 0.35)
 }
 corners = {
     "upper-right":(2.4, 0.2, 1), 
@@ -96,7 +96,7 @@ def monitoring():
 # copter.callib_zero_z()
 
 takeoff()
-# ring()
+ring()
 # gate()
 land()
 copter.arming(False)
