@@ -17,6 +17,7 @@ copter.start_coord = points["takeoff"]
 copter.zero_z = 2.5
 # copter.callib_zero_z()
 
+print("takeoff")
 copter.takeoff(1.5)
 print("takeoff compl")
 rospy.sleep(0.5)
