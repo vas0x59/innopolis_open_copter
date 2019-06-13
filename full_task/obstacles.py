@@ -24,6 +24,28 @@ ring_points = {
     "ring_1":(2.8, 1.7, 0.5),
     "ring_2":(2.8, 0.8, 0.5)
 }
+corners = {
+    "upper-right":(2.4, 0.2, 1), 
+    "upper-left":(0.2, 0.2, 1),
+    "lower-right":(2.4, 2.4, 1), 
+    "lower-left":(0.2, 0.4, 1)
+}
+monitoring_points = {
+    "1":(),
+    "2":(),
+    "3":(),
+    "4":(),
+}
+
+rospy.init_node("flight")
+
+color_sub = Utils.ColorReg()
+
+copter = Utils.Copter(markers_flipped=True)
+copter.start_coord = points["takeoff"]
+copter.zero_z = 2.5
+
+
 def gate():
     print("going to gate_1")
     copter.go_to_point(gate_points["gate_1"])
@@ -35,7 +57,6 @@ def takeoff():
     copter.takeoff(1.5)
     print("takeoff compl")
     rospy.sleep(0.5)
-
     print("go to tk point")
     copter.go_to_point(points["takeoff"])
     print("hold tk point")
@@ -54,21 +75,28 @@ def land():
     rospy.sleep(3)
     print("land")
     copter.land()
-
+def grab():
+    print("going to grab")
+    copter.go_to_point(grab_points["grab_hover"])
+    copter.land()
+    rospy.sleep(5)
+    copter.takeoff(1.5)
+    copter.go_to_point(grab_points["grab_hover"])
+    print("grab done")
+def monitoring():
+    pass
+    
 # def grab():
 
-corners = {"upper-right":(2.4, 0.5, 0.5), "upper-left":(0.2, 0.2, 0.5)}
+
 
 # ros_tools = Utils.RosTools()
 
-rospy.init_node("flight")
 
-copter = Utils.Copter(markers_flipped=True)
-copter.start_coord = points["takeoff"]
-copter.zero_z = 2.5
 # copter.callib_zero_z()
 
 takeoff()
-ring()
-gate()
+# ring()
+# gate()
 land()
+copter.arming(False)
