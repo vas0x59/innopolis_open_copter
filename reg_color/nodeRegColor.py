@@ -25,14 +25,20 @@ string_pub = rospy.Publisher("color_reg", String)
 bridge = CvBridge()
 
 # image_sub = rospy.Subscriber("image_topic",Image,callback)
+skip_i = 0
 while True:
     _, cv_image = cap.read()
-    cv_image = cv2.resize(cv_image, (50, 50))
-    image_pub.publish(bridge.cv2_to_imgmsg(cv_image, "bgr8"))
-    color = RegColor.regSum(cv_image)
-    print(color)
-    string_pub.publish(color)
-
+    if skip_i % 2:
+        cv_image = cv2.resize(cv_image, (40, 40))
+        image_pub.publish(bridge.cv2_to_imgmsg(cv_image, "bgr8"))
+        color = RegColor.regSum(cv_image)
+        # print(color)
+        string_pub.publish(color)
+    if skip_i >= 2000:
+        skip_i = 0
+    else:
+        skip_i+=1
     # cv2.imshow("Image window", cv_image)
-    cv2.waitKey(1)
-# rospy.spin()
+    # cv2.waitKey(1)
+cap.release()
+rospy.spin()

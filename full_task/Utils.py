@@ -27,7 +27,7 @@ class Magnet:
 #         self.node_name = node_name
 
 class ColorReg:
-    def __init__(self, topic="/reg_color"):
+    def __init__(self, topic="/color_reg"):
         self.sub = rospy.Subscriber(topic, String, self._callback)
         self.color = "none"
     def _callback(self, msg):
