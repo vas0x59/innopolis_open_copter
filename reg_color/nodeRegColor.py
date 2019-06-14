@@ -8,17 +8,31 @@ from cv_bridge import CvBridge, CvBridgeError
 
 
 rospy.init_node('regColor')
-# image_pub = rospy.Publisher("image_topic_2",Image)
-def callback(data):
-    try:
-      cv_image = bridge.imgmsg_to_cv2(data, "bgr8")
-    except CvBridgeError as e:
-      print(e)
+cap = cv2.VideoCapture(0)
 
-    (rows,cols,channels) = cv_image.shape
-    cv2.imshow("Image window", cv_image)
-    cv2.waitKey(3)
+image_pub = rospy.Publisher("image_topic_debug",Image)
+string_pub = rospy.Publisher("color_reg", String)
+# def callback(data):
+#     try:
+#       cv_image = bridge.imgmsg_to_cv2(data, "bgr8")
+#     except CvBridgeError as e:
+#       print(e)
+
+#     (rows,cols,channels) = cv_image.shape
+#     cv2.imshow("Image window", cv_image)
+#     cv2.waitKey(3)
+
 bridge = CvBridge()
-image_sub = rospy.Subscriber("image_topic",Image,callback)
 
-rospy.spin()
+# image_sub = rospy.Subscriber("image_topic",Image,callback)
+while True:
+    _, cv_image = cap.read()
+    cv_image = cv2.resize(cv_image, (50, 50))
+    image_pub.publish(bridge.cv2_to_imgmsg(cv_image, "bgr8"))
+    color = RegColor.regSum(cv_image)
+    print(color)
+    string_pub.publish(color)
+
+    # cv2.imshow("Image window", cv_image)
+    cv2.waitKey(1)
+# rospy.spin()

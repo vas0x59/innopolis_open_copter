@@ -8,6 +8,7 @@ colors = {
 
 def regSum(img):
     color = "none"
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     #bgr
     r_mean = np.mean(img[:, :, 2]) 
     g_mean= np.mean(img[:, :, 1]) 
