@@ -10,6 +10,7 @@ from cv_bridge import CvBridge, CvBridgeError
 rospy.init_node('regColor')
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
+cap.set(cv2.CAP_PROP_AUTO_WB, 0)
 image_pub = rospy.Publisher("image_topic_debug",Image)
 string_pub = rospy.Publisher("color_reg", String)
 # def callback(data):
