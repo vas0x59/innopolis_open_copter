@@ -4,16 +4,16 @@ import numpy as np
 labels = ["red", "yellow", "green", "blue", "none"]
 colors = {
     "red":[
-        (0, 180, 180), (20, 230, 230)
+        (0, 116, 180), (13, 255, 255), (161, 116, 180), (180, 255, 255)
     ], 
     "yellow":[
-        (20, 190, 170), (64, 220, 190)
+        (13,  56, 132), (45, 255, 255) #13  56 132] [ 45 255 255
     ], 
     "green":[
-        (64, 100, 160), (90, 130, 190)
+        (72, 103, 65), (89, 255, 255) #72 103  65] [ 89 255 255
     ], 
     "blue":[
-        (90, 180, 215), (140, 210, 225)
+        (100, 116, 131), (153, 255, 255)
     ]
 }
 def regSum(img):
@@ -21,12 +21,26 @@ def regSum(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     c_mean = 0
     for c in colors:
-        color_l = colors[c][0]
-        color_u = colors[c][1]
-        cc_mean = np.mean(cv2.inRange(img, color_l, color_u)[:, :]) / 255
+        if len(colors[c]) == 2:
+            color_l = colors[c][0]
+            color_u = colors[c][1]
+            cc_mean = np.mean(cv2.inRange(img, color_l, color_u)[:, :]) / 255
+            if cc_mean > 0.2 and cc_mean > c_mean:
+                color = c   
+        elif len(colors[c]) == 4:
+            color_l = colors[c][0]
+            color_u = colors[c][1]
+            color_l_2 = colors[c][2]
+            color_u_2 = colors[c][3]
+            mask1 = cv2.inRange(img, color_l, color_u)[:, :]
+            mask2 = cv2.inRange(img, color_l_2, color_u_2)[:, :]
+            mask = mask1 | mask2
+            cv2.imshow("mask", mask)
+            cc_mean = np.mean(mask) / 255
+            if cc_mean > 0.2 and cc_mean > c_mean:
+                color = c   
         # print(cc_mean)
-        if cc_mean > 0.2 and cc_mean > c_mean:
-            color = c
+        
     
     # #bgr
     # r_mean = np.mean(img[:, :, 2]) 
