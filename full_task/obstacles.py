@@ -19,6 +19,10 @@ gate_points = {
     "gate_1":(2.2, -0.3, 0.5),
     "gate_2":(1, -0.3, 0.5)
 }
+ungrab_points = {
+    "ungrab_hover":(0.29, -0.15, 0.7)
+    # "grab":(1, 1, 0.4)
+}
 grab_points = {
     "grab_hover":(0.29, -0.15, 0.7)
     # "grab":(1, 1, 0.4)
@@ -42,8 +46,11 @@ monitoring_points = {
 }
 
 led = Leds(21)
+
+magnet = Utils.Magnet()
+
 rospy.init_node("flight")
-# color_reg = Uti
+
 color_sub = Utils.ColorReg()
 
 copter = Utils.Copter(markers_flipped=True)
@@ -85,6 +92,7 @@ def ring():
     copter.go_to_point(ring_points["ring_2"], speed=0.8)
     rospy.sleep(2)
     print("ring done")
+
 def land():
     print("go to land")
     copter.go_to_point(points["land"], tolerance=0.19)
@@ -97,61 +105,81 @@ def land():
     print("land")
     copter.land()
     led.setPixelsColor(Utils.led_colors["none"])
+
+def ungrab():
+    print("going to ungrab")
+    copter.go_to_point(ungrab_points["ungrab_hover"], tolerance=0.19)
+    rospy.sleep(3)
+    copter.land()
+    rospy.sleep(4)
+    print("magnet off")
+    magnet.off()
+    rospy.sleep(3)
+    copter.takeoff(1.5)
+    copter.go_to_point(ungrab_points["ungrab_hover"])
+    print("ungrab done")
+
+def mon1():
+    copter.go_to_point(monitoring_points["1"], yaw=math.radians(90))
+    rospy.sleep(2)
+    color_sub.color = "blue"
+    led.setPixelsColor(Utils.led_colors[color_sub.color])
+    rospy.sleep(3)
+    led.setPixelsColor(Utils.led_colors["none"])
+
+def mon2():
+    copter.go_to_point(monitoring_points["2"], yaw=math.radians(90))
+    rospy.sleep(2)
+    color_sub.color = "red"
+    led.setPixelsColor(Utils.led_colors[color_sub.color])
+    rospy.sleep(3)
+    led.setPixelsColor(Utils.led_colors["none"])
+
+def mon3():
+    copter.go_to_point(monitoring_points["3"], yaw=math.radians(270))
+    rospy.sleep(2)
+    color_sub.color = "yellow"
+    led.setPixelsColor(Utils.led_colors[color_sub.color])
+    rospy.sleep(3)
+    led.setPixelsColor(Utils.led_colors["none"])
+
+def mon4():
+    copter.go_to_point(monitoring_points["4"], yaw=math.radians(270))
+    rospy.sleep(2)
+    color_sub.color = "green"
+    led.setPixelsColor(Utils.led_colors[color_sub.color])
+    rospy.sleep(3)
+    led.setPixelsColor(Utils.led_colors["none"])
+# def mon(i):
+#     copter.go_to_point(monitoring_points[str(i)])
+#     rospy.sleep(4)
+    
 def grab():
     print("going to grab")
     copter.go_to_point(grab_points["grab_hover"], tolerance=0.19)
     rospy.sleep(3)
     copter.land()
-    rospy.sleep(5)
+    rospy.sleep(4)
+    print("magnet on")
+    magnet.on()
+    rospy.sleep(3)
     copter.takeoff(1.5)
     copter.go_to_point(grab_points["grab_hover"])
     print("grab done")
-
-def mon1():
-    copter.go_to_point(monitoring_points["1"], yaw=float('nan'))
-    rospy.sleep(2)
-    color_sub.color = "blue"
-    led.setPixelsColor(Utils.led_colors[color_sub.color])
-    rospy.sleep(3)
-
-def mon2():
-    copter.go_to_point(monitoring_points["2"], yaw=float('nan'))
-    rospy.sleep(2)
-    color_sub.color = "red"
-    led.setPixelsColor(Utils.led_colors[color_sub.color])
-    rospy.sleep(3)
-
-def mon3():
-    copter.go_to_point(monitoring_points["3"], yaw=float('nan'))
-    rospy.sleep(2)
-    color_sub.color = "yellow"
-    led.setPixelsColor(Utils.led_colors[color_sub.color])
-    rospy.sleep(3)
-
-def mon4():
-    copter.go_to_point(monitoring_points["4"], yaw=float('nan'))
-    rospy.sleep(2)
-    color_sub.color = "green"
-    led.setPixelsColor(Utils.led_colors[color_sub.color])
-    rospy.sleep(3)
-# def mon(i):
-#     copter.go_to_point(monitoring_points[str(i)])
-#     rospy.sleep(4)
-    
-# def grab():
 
 
 
 # ros_tools = Utils.RosTools()
 
 
-# 
+magnet.off()
+
 takeoff()
 mon1()
 ring()
 mon2()
 gate()
-grab()
+ungrab()
 mon3()
 mon4()
 land()
