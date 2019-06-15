@@ -13,11 +13,11 @@ led_colors = {
     "wait":Color(0,90,140), 
     "rec":Color(225,50,5), 
     "land":Color(225,90,0),
-    "none":Color(20, 0, 0),
-    "red":Color(0, 20, 200),
+    "none":Color(0, 0, 0),
+    "red":Color(200, 20, 0),
     "green":Color(0, 200, 20),
-    "blue":Color(200, 20, 0),
-    "yellow":Color(0, 120, 160)
+    "blue":Color(0, 20, 200),
+    "yellow":Color(160, 120, 0)
 }
 
 class Magnet:
@@ -64,13 +64,13 @@ class Copter:
         """
         Zero floor level
         """
-
+        count = 20
         zz = 0
-        for i in range(10):
+        for i in range(count):
             telem = self.get_telemetry(frame_id="aruco_map")
             zz += telem.z
             rospy.sleep(0.15)
-        self.zero_z = zz/10
+        self.zero_z = zz/count
         print("zero_z", self.zero_z)
         
 
