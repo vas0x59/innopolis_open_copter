@@ -25,6 +25,7 @@ ungrab_points = {
 }
 grab_points = {
     "grab_hover":(0.29, -0.15, 0.7)
+    "grab_hover":(0.29, -0.15, 0.7)
     # "grab":(1, 1, 0.4)
 }
 ring_points = {
@@ -158,12 +159,12 @@ def grab():
     print("going to grab")
     copter.go_to_point(grab_points["grab_hover"], tolerance=0.19)
     rospy.sleep(3)
-    copter.land()
-    rospy.sleep(4)
+    # copter.land()
+    # rospy.sleep(4)
     print("magnet on")
     magnet.on()
     rospy.sleep(3)
-    copter.takeoff(1.5)
+    # copter.takeoff(1.5)
     copter.go_to_point(grab_points["grab_hover"])
     print("grab done")
 
