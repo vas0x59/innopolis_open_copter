@@ -10,7 +10,7 @@ colors = {
         (13,  56, 132), (45, 255, 255) #13  56 132] [ 45 255 255
     ], 
     "green":[
-        (72, 103, 65), (89, 255, 255) #72 103  65] [ 89 255 255
+        (55, 80, 50), (100, 255, 255) #72 103  65] [ 89 255 255
     ], 
     "blue":[
         (100, 116, 131), (153, 255, 255)
@@ -35,7 +35,7 @@ def regSum(img):
             mask1 = cv2.inRange(img, color_l, color_u)[:, :]
             mask2 = cv2.inRange(img, color_l_2, color_u_2)[:, :]
             mask = mask1 | mask2
-            cv2.imshow("mask", mask)
+            # cv2.imshow("mask", mask)
             cc_mean = np.mean(mask) / 255
             if cc_mean > 0.2 and cc_mean > c_mean:
                 color = c   
