@@ -41,7 +41,7 @@ monitoring_points = {
     "4":(0.355, 1.75, 0.4),
 }
 
-led = Leds(40)
+led = Leds(21)
 rospy.init_node("flight")
 # color_reg = Uti
 color_sub = Utils.ColorReg()

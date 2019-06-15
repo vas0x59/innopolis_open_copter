@@ -5,7 +5,7 @@ import rospy
 from clever import srv
 from std_srvs.srv import Trigger
 
-led = Leds(40)
+led = Leds(21)
 
 get_telemetry = rospy.ServiceProxy('get_telemetry', srv.GetTelemetry)
 print(get_telemetry(frame_id="body"))
