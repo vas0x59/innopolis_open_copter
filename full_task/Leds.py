@@ -5,7 +5,7 @@ from rpi_ws281x import Adafruit_NeoPixel
 from rpi_ws281x import Color
 
 class Leds:
-    def __init__(self, count, pin=21, br=100):
+    def __init__(self, count, pin=21, br=20):
         """
         LEDs
         """

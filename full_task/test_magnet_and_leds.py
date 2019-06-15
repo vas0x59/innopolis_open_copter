@@ -7,7 +7,7 @@ import rospy
 from clever import srv
 from std_srvs.srv import Trigger
 import pigpio
-led = Leds(30)
+led = Leds(40)
 get_telemetry = rospy.ServiceProxy('get_telemetry', srv.GetTelemetry)
 print(get_telemetry(frame_id="body"))
 led_colors = {"takeoff":Color(200,0,200), "wait":Color(140,220,0), "rec":Color(0,0,0), "land":Color(225,90,0)}
