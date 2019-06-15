@@ -8,7 +8,17 @@ import pigpio
 from rpi_ws281x import Color
 from std_msgs.msg import String
 
-led_colors = {"takeoff":Color(200,0,200), "wait":Color(0,90,140), "rec":Color(225,50,5), "land":Color(225,90,0)}
+led_colors = {
+    "takeoff":Color(200,0,200), 
+    "wait":Color(0,90,140), 
+    "rec":Color(225,50,5), 
+    "land":Color(225,90,0),
+    "none":Color(20, 0, 0),
+    "red":Color(0, 20, 200),
+    "green":Color(0, 200, 20),
+    "blue":Color(200, 20, 0),
+    "yellow":Color(0, 120, 160)
+}
 
 class Magnet:
     def __init__(self, pin=22):
