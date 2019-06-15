@@ -105,7 +105,7 @@ def land():
     print("land")
     copter.land()
     led.setPixelsColor(Utils.led_colors["none"])
-    
+
 def ungrab():
     print("going to ungrab")
     copter.go_to_point(ungrab_points["ungrab_hover"], tolerance=0.19)
@@ -120,32 +120,36 @@ def ungrab():
     print("ungrab done")
 
 def mon1():
-    copter.go_to_point(monitoring_points["1"], yaw=float('nan'))
+    copter.go_to_point(monitoring_points["1"], yaw=math.radians(90))
     rospy.sleep(2)
     color_sub.color = "blue"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
     rospy.sleep(3)
+    led.setPixelsColor(Utils.led_colors["none"])
 
 def mon2():
-    copter.go_to_point(monitoring_points["2"], yaw=float('nan'))
+    copter.go_to_point(monitoring_points["2"], yaw=math.radians(90))
     rospy.sleep(2)
     color_sub.color = "red"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
     rospy.sleep(3)
+    led.setPixelsColor(Utils.led_colors["none"])
 
 def mon3():
-    copter.go_to_point(monitoring_points["3"], yaw=float('nan'))
+    copter.go_to_point(monitoring_points["3"], yaw=math.radians(270))
     rospy.sleep(2)
     color_sub.color = "yellow"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
     rospy.sleep(3)
+    led.setPixelsColor(Utils.led_colors["none"])
 
 def mon4():
-    copter.go_to_point(monitoring_points["4"], yaw=float('nan'))
+    copter.go_to_point(monitoring_points["4"], yaw=math.radians(270))
     rospy.sleep(2)
     color_sub.color = "green"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
     rospy.sleep(3)
+    led.setPixelsColor(Utils.led_colors["none"])
 # def mon(i):
 #     copter.go_to_point(monitoring_points[str(i)])
 #     rospy.sleep(4)
