@@ -10,7 +10,9 @@ from cv_bridge import CvBridge, CvBridgeError
 rospy.init_node('regColor')
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
-cap.set(cv2.CAP_PROP_AUTO_WB, 0)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 32)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 32)
+# cap.set(cv2.CAP_PROP_AUTO_WB, 0)
 image_pub = rospy.Publisher("image_topic_debug",Image)
 string_pub = rospy.Publisher("color_reg", String)
 # def callback(data):
@@ -29,8 +31,8 @@ bridge = CvBridge()
 skip_i = 0
 while True:
     _, cv_image = cap.read()
-    if skip_i % 2:
-        cv_image = cv2.resize(cv_image, (40, 40))
+    if skip_i % 5:
+        cv_image = cv2.resize(cv_image, (32, 32))
         image_pub.publish(bridge.cv2_to_imgmsg(cv_image, "bgr8"))
         color = RegColor.regSum(cv_image)
         # print(color)
@@ -40,6 +42,6 @@ while True:
     else:
         skip_i+=1
     # cv2.imshow("Image window", cv_image)
-    # cv2.waitKey(1)
+    cv2.waitKey(2)
 cap.release()
-rospy.spin()
+# rospy.spin()
