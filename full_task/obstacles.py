@@ -20,11 +20,7 @@ gate_points = {
     "gate_2":(1, -0.3, 0.5)
 }
 grab_points = {
-<<<<<<< HEAD
-    "grab_hover":(0.29, -0.1, 0.8)
-=======
     "grab_hover":(0.29, -0.15, 0.7)
->>>>>>> 260489ac5a1cc652e2dfad6f027e4a395459770c
     # "grab":(1, 1, 0.4)
 }
 ring_points = {
