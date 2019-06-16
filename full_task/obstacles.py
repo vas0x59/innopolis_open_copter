@@ -24,8 +24,8 @@ ungrab_points = {
     # "grab":(1, 1, 0.4)
 }
 grab_points = {
-    "grab_hover":(0.29, -0.15, 0.7)
-    "grab_hover":(0.29, -0.15, 0.7)
+    "grab_hover":(1.54, 0.68, 0.6),
+    "grab_grab":(1.54, 0.68, 0.20)
     # "grab":(1, 1, 0.4)
 }
 ring_points = {
@@ -56,8 +56,8 @@ color_sub = Utils.ColorReg()
 
 copter = Utils.Copter(markers_flipped=True)
 copter.start_coord = points["takeoff"]
-# copter.zero_z = 2.5
-copter.callib_zero_z()
+copter.zero_z = 2.53
+# copter.callib_zero_z()
 
 
 def gate():
@@ -80,7 +80,7 @@ def takeoff():
     print("hold tk point")
     
     led.setPixelsColor(Utils.led_colors["wait"])
-    rospy.sleep(8)
+    rospy.sleep(5)
     led.setPixelsColor(Utils.led_colors["none"])
 
 def ring():
@@ -163,7 +163,12 @@ def grab():
     # rospy.sleep(4)
     print("magnet on")
     magnet.on()
-    rospy.sleep(3)
+    for i in range(6):
+        copter.go_to_point(grab_points["grab_grab"], tolerance=0.25, speed=0.8)
+        rospy.sleep(1)
+        copter.go_to_point(grab_points["grab_hover"], tolerance=0.28, speed=0.8)
+        rospy.sleep(0.5)
+
     # copter.takeoff(1.5)
     copter.go_to_point(grab_points["grab_hover"])
     print("grab done")
@@ -176,13 +181,17 @@ def grab():
 magnet.off()
 
 takeoff()
-mon1()
-ring()
-mon2()
-gate()
-ungrab()
+grab()
+
+# mon1()
+# ring()
+# mon2()
+# gate()
+# ungrab()
 mon3()
-mon4()
+# mon4()
+magnet.off()
+
 land()
 print("disarm")
 copter.arming(False)
