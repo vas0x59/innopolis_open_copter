@@ -32,7 +32,7 @@ class Magnet:
         self.pi.write(self._pin, 0)
 
 class IR:
-    def __init__(self, topic=""):
+    def __init__(self, topic="ir_reciv"):
         self.sub = rospy.Subscriber(topic, String, self._callback)
         self.data = "none"
     def _callback(self, msg):
