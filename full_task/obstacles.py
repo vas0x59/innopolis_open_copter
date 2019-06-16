@@ -20,7 +20,7 @@ gate_points = {
     "gate_2":(1, -0.3, 0.5)
 }
 ungrab_points = {
-    "ungrab_hover":(0.29, -0.15, 0.7)
+    "ungrab_hover":(0.29, -0.15, 0.6)
     # "grab":(1, 1, 0.4)
 }
 grab_points = {
@@ -45,6 +45,12 @@ monitoring_points = {
     "3":(0.355, 1.55, 0.4),
     "4":(0.355, 1.75, 0.4),
 }
+stand_points = {
+    "stand_1_up_approach":(2, 1.85, 1.4),
+    "stand_1_down_approach":(2, 1.85, 0.4),
+    "stand_2_up_approach":(0.6, 1.85, 1.4),
+    "stand_2_down_approach":(0.6, 1.85, 0.4)
+}
 
 led = Leds(21)
 
@@ -56,7 +62,7 @@ color_sub = Utils.ColorReg()
 
 copter = Utils.Copter(markers_flipped=True)
 copter.start_coord = points["takeoff"]
-copter.zero_z = 2.53
+copter.zero_z = 2.54
 # copter.callib_zero_z()
 
 
@@ -151,6 +157,19 @@ def mon4():
     led.setPixelsColor(Utils.led_colors[color_sub.color])
     rospy.sleep(3)
     led.setPixelsColor(Utils.led_colors["none"])
+
+def stand(p):
+    if p == "up":
+        copter.go_to_point(stand_points["stand_1_up_approach"], tolerance=0.2)
+        copter.go_to_point(stand_points["stand_2_up_approach"], tolerance=0.2)
+        copter.go_to_point(stand_points["stand_2_down_approach"], tolerance=0.2)
+        copter.go_to_point(stand_points["stand_1_down_approach"], tolerance=0.2)
+    elif p == "down":
+        copter.go_to_point(stand_points["stand_1_down_approach"], tolerance=0.2)
+        copter.go_to_point(stand_points["stand_2_down_approach"], tolerance=0.2)
+        copter.go_to_point(stand_points["stand_2_up_approach"], tolerance=0.2)
+        copter.go_to_point(stand_points["stand_1_up_approach"], tolerance=0.2)
+
 # def mon(i):
 #     copter.go_to_point(monitoring_points[str(i)])
 #     rospy.sleep(4)
