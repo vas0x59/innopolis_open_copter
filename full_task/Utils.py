@@ -31,6 +31,22 @@ class Magnet:
     def off(self):
         self.pi.write(self._pin, 0)
 
+class IR:
+    def __init__(self, topic=""):
+        self.sub = rospy.Subscriber(topic, String, self._callback)
+        self.data = "none"
+    def _callback(self, msg):
+        self.data = msg.data
+    def waitData(self):
+        d = "none"
+        while True:
+            a = self.data
+            if a != "none":
+                d = a
+                break
+        return d
+            
+        
 # class RosTools:
 #     def __init__(self, node_name="flight"):
 #         rospy.init_node(node_name)
