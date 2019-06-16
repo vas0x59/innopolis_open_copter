@@ -6,7 +6,7 @@ import math
 import time
 import Utils
 
-
+rospy.init_node("flight")
 points = {
     "takeoff":(2.3, 1.85, 0.8),
     # "ring":(2.8, 1.4, 0.5),
@@ -77,7 +77,7 @@ tasks = {"land":land, "takeoff":takeoff, "mon1":mon1}
 missions = {"qw2e":["land", "takeoff", "mon1"]}
 while True:
     try:
-        d = ir.waitData
+        d = ir.waitData()
         # ir_cmd = ir_cmds[d]
         mission = missions[d]
         print(mission)
