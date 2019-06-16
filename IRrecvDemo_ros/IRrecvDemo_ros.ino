@@ -18,16 +18,13 @@ decode_results results;
 
 void setup()
 {
-    //  Serial.begin(57600);
-    // In case the interrupt driver crashes on setup, give a clue
-    // to the user what's going on.
-    //  Serial.println("Enabling IRin");
+
     pinMode(POWER_PIN, OUTPUT);
     digitalWrite(POWER_PIN, HIGH);
     irrecv.enableIRIn(); // Start the receiver
     nh.initNode();
     nh.advertise(chatter);
-    //  Serial.println("Enabled IRin");
+
 }
 int i_count = 0;
 bool qwe = false;
@@ -37,28 +34,27 @@ void loop()
     if (irrecv.decode(&results))
     {
 
-        //    int v = ;
         String str = String((int)results.value, HEX);
         str_msg.data = str.c_str();
         chatter.publish(&str_msg);
         last_ir = str;
-        irrecv.resume(); // Receive the next value
+        irrecv.resume();
         qwe = true;
         i_count = 0;
     }
     else if (qwe)
     {
-        if (i_count < 1)
-        {
-            str_msg.data = last_ir.c_str();
-            chatter.publish(&str_msg);
-            i_count++;
-        }
-        else
-        {
-            qwe = false;
-            i_count = 0;
-        }
+        // if (i_count < 1)
+        // {
+        //     str_msg.data = last_ir.c_str();
+        //     chatter.publish(&str_msg);
+        //     i_count++;
+        // }
+        // else
+        // {
+        //     qwe = false;
+        //     i_count = 0;
+        // }
     }
     else
     {
