@@ -159,16 +159,26 @@ def mon4():
     led.setPixelsColor(Utils.led_colors["none"])
 
 def stand(p):
+    speed = 0.8
+    delay_time = 1
     if p == "up":
-        copter.go_to_point(stand_points["stand_1_up_approach"], tolerance=0.2)
-        copter.go_to_point(stand_points["stand_2_up_approach"], tolerance=0.2)
-        copter.go_to_point(stand_points["stand_2_down_approach"], tolerance=0.2)
-        copter.go_to_point(stand_points["stand_1_down_approach"], tolerance=0.2)
+        copter.go_to_point(stand_points["stand_1_up_approach"], tolerance=0.2, speed=speed)
+        rospy.sleep(delay_time)
+        copter.go_to_point(stand_points["stand_2_up_approach"], tolerance=0.2, speed=speed)
+        rospy.sleep(delay_time)
+        copter.go_to_point(stand_points["stand_2_down_approach"], tolerance=0.2, speed=speed)
+        rospy.sleep(delay_time)
+        copter.go_to_point(stand_points["stand_1_down_approach"], tolerance=0.2, speed=speed)
+        rospy.sleep(delay_time)
     elif p == "down":
-        copter.go_to_point(stand_points["stand_1_down_approach"], tolerance=0.2)
-        copter.go_to_point(stand_points["stand_2_down_approach"], tolerance=0.2)
-        copter.go_to_point(stand_points["stand_2_up_approach"], tolerance=0.2)
-        copter.go_to_point(stand_points["stand_1_up_approach"], tolerance=0.2)
+        copter.go_to_point(stand_points["stand_1_down_approach"], tolerance=0.2, speed=speed)
+        rospy.sleep(delay_time)
+        copter.go_to_point(stand_points["stand_2_down_approach"], tolerance=0.2, speed=speed)
+        rospy.sleep(delay_time)
+        copter.go_to_point(stand_points["stand_2_up_approach"], tolerance=0.2, speed=speed)
+        rospy.sleep(delay_time)
+        copter.go_to_point(stand_points["stand_1_up_approach"], tolerance=0.2, speed=speed)
+        rospy.sleep(delay_time)
 
 # def mon(i):
 #     copter.go_to_point(monitoring_points[str(i)])
