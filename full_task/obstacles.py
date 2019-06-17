@@ -21,12 +21,13 @@ gate_points = {
     "gate_2":(1, -0.3, 0.5)
 }
 ungrab_points = {
-    "ungrab_hover":(0.29, -0.15, 0.6)
+    "ungrab_ungrab": (0.1, -0.88, 0.34),
+    "ungrab_hover":(0.1, -0.88, 0.6)
     # "grab":(1, 1, 0.4)
 }
 grab_points = {
-    "grab_hover":(1.54, 0.68, 0.6),
-    "grab_grab":(1.54, 0.68, 0.20)
+    "grab_hover":(1.56, 0.55, 0.65),
+    "grab_grab":(1.56, 0.55, 0.19)
     # "grab":(1, 1, 0.4)
 }
 ring_points = {
@@ -121,13 +122,17 @@ def land():
 def ungrab():
     print("going to ungrab")
     copter.go_to_point(ungrab_points["ungrab_hover"], tolerance=0.19)
-    rospy.sleep(3)
+    rospy.sleep(2)
+    copter.go_to_point(ungrab_points["ungrab_ungrab"], tolerance=0.19)
+    rospy.sleep(2)
     copter.land()
-    rospy.sleep(4)
+    rospy.sleep(2)
     print("magnet off")
     magnet.off()
+    rospy.sleep(2)
+    copter.takeoff(1)
+    
     rospy.sleep(3)
-    copter.takeoff(1.5)
     copter.go_to_point(ungrab_points["ungrab_hover"])
     print("ungrab done")
 
@@ -200,7 +205,7 @@ def grab():
     # rospy.sleep(4)
     print("magnet on")
     magnet.on()
-    for i in range(6):
+    for i in range(3):
         copter.go_to_point(grab_points["grab_grab"], tolerance=0.25, speed=0.8)
         rospy.sleep(1)
         copter.go_to_point(grab_points["grab_hover"], tolerance=0.28, speed=0.8)
@@ -220,8 +225,12 @@ magnet.on()
 
 takeoff("down")
 stand("down")
-ring()
-gate()
+copter.go_to_point((2.38,0.69,1.2))
+grab()
+ungrab()
+
+# ring()
+# gate()
 # grab()
 
 # mon1()
