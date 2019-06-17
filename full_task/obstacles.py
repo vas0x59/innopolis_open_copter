@@ -31,9 +31,9 @@ grab_points = {
     # "grab":(1, 1, 0.4)
 }
 ring_points = {
-    "ring_1":(2.35, 1.8, 0.35),
+    "ring_1":(2.45, 1.8, 0.35),
     "ring":(2.35, 1, 0.35),
-    "ring_2":(2.35, 0.18, 0.35)
+    "ring_2":(2.45, 0.18, 0.35)
 }
 corners = {
     "upper-right":(2.4, 0.2, 1), 
@@ -110,7 +110,7 @@ def land():
     print("go to land")
     copter.go_to_point(points["land"], tolerance=0.19, speed=0.8)
     print("hold land")
-    rospy.sleep(4)
+    rospy.sleep(2)
 
     led.setPixelsColor(Utils.led_colors["land"])
     copter.go_to_point(points["land_2"])
@@ -124,7 +124,7 @@ def ungrab():
     copter.go_to_point(ungrab_points["ungrab_hover"], tolerance=0.19, speed=0.8)
     rospy.sleep(2)
     copter.go_to_point(ungrab_points["ungrab_ungrab"], tolerance=0.19)
-    rospy.sleep(2)
+    rospy.sleep(0.5)
     copter.land()
     rospy.sleep(2)
     print("magnet off")
