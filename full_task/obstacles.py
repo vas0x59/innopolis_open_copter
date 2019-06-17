@@ -26,8 +26,8 @@ ungrab_points = {
     # "grab":(1, 1, 0.4)
 }
 grab_points = {
-    "grab_hover":(1.56, 0.55, 0.65),
-    "grab_grab":(1.56, 0.55, 0.19)
+    "grab_hover":(1.56, 0.55, 0.60),
+    "grab_grab":(1.56, 0.55, 0.184)
     # "grab":(1, 1, 0.4)
 }
 ring_points = {
@@ -48,10 +48,10 @@ monitoring_points = {
     "4":(0.355, 1.75, 0.4),
 }
 stand_points = {
-    "stand_1_up_approach":(2.1, 1.60, 1.8),
-    "stand_1_down_approach":(2.1, 1.60, 0.5),
-    "stand_2_up_approach":(0.52, 1.60, 1.8),
-    "stand_2_down_approach":(0.52, 1.60, 0.5)
+    "stand_1_up_approach":(2.1, 1.7, 1.8),
+    "stand_1_down_approach":(2.1, 1.7, 0.5),
+    "stand_2_up_approach":(0.52, 1.7, 1.8),
+    "stand_2_down_approach":(0.52, 1.7, 0.5)
 }
 
 led = Leds(21)
@@ -99,8 +99,8 @@ def ring():
     print("going to ring_1")
     copter.go_to_point(ring_points["ring_1"], speed=0.8)
     rospy.sleep(2)
-    print("going to ring")
-    copter.go_to_point(ring_points["ring"], speed=0.8)
+    # print("going to ring")
+    # copter.go_to_point(ring_points["ring"], speed=0.8)
     print("going to ring_2")
     copter.go_to_point(ring_points["ring_2"], speed=0.8)
     rospy.sleep(2)
@@ -208,7 +208,7 @@ def grab():
     for i in range(3):
         copter.go_to_point(grab_points["grab_grab"], tolerance=0.25, speed=0.8)
         rospy.sleep(1)
-        copter.go_to_point(grab_points["grab_hover"], tolerance=0.28, speed=0.8)
+        copter.go_to_point(grab_points["grab_hover"], tolerance=0.245, speed=0.8)
         rospy.sleep(0.5)
 
     # copter.takeoff(1.5)
