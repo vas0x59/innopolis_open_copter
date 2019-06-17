@@ -8,10 +8,10 @@ import Utils
 
 rospy.init_node("flight")
 points = {
-    "takeoff":(2.3, 1.85, 0.8),
+    "takeoff":(2.3, 1.85, 1.8),
     # "ring":(2.8, 1.4, 0.5),
     # "gate":(1.9, 0.5, 0.5),
-    "land": (0.355, 1.85, 1.3),
+    "land": (0.355, 1.85, 1.8),
     "land_2": (0.355, 1.85, 0.185)
 }
 gate_points = {
@@ -74,7 +74,7 @@ copter.start_coord = points["takeoff"]
 copter.callib_zero_z()
 # ir_cmds = {"qw2e":"land"}
 tasks = {"land":land, "takeoff":takeoff, "mon1":mon1}
-missions = {"qw2e":["land", "takeoff", "mon1"]}
+missions = {"52ad":["takeoff", "mon1", "land"]}
 while True:
     try:
         d = ir.waitData()
