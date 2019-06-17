@@ -62,7 +62,7 @@ rospy.init_node("flight")
 color_sub = Utils.ColorReg()
 
 copter = Utils.Copter(markers_flipped=True)
-copter.start_coord = points["takeoff"]
+copter.start_coord = points["takeoff_down"]
 copter.zero_z = 2.54
 # copter.callib_zero_z()
 
@@ -85,7 +85,7 @@ def takeoff(p):
     print("go to tk point")
     if p == "up":
         copter.go_to_point(points["takeoff_up"])
-    else p == "down":
+    else:
         copter.go_to_point(points["takeoff_down"])
 
     print("hold tk point")
@@ -228,7 +228,7 @@ gate()
 
 # mon2()
 # gate()
-# ungrab()
+# ungrab() 
 # mon3()
 # mon4()
 # magnet.off()
