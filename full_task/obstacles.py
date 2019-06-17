@@ -97,7 +97,7 @@ def takeoff(p):
 
 def ring():
     print("going to ring_1")
-    copter.go_to_point(ring_points["ring_1"])
+    copter.go_to_point(ring_points["ring_1"], speed=0.8)
     rospy.sleep(2)
     print("going to ring")
     copter.go_to_point(ring_points["ring"], speed=0.8)
@@ -108,7 +108,7 @@ def ring():
 
 def land():
     print("go to land")
-    copter.go_to_point(points["land"], tolerance=0.19)
+    copter.go_to_point(points["land"], tolerance=0.19, speed=0.8)
     print("hold land")
     rospy.sleep(4)
 
@@ -121,7 +121,7 @@ def land():
 
 def ungrab():
     print("going to ungrab")
-    copter.go_to_point(ungrab_points["ungrab_hover"], tolerance=0.19)
+    copter.go_to_point(ungrab_points["ungrab_hover"], tolerance=0.19, speed=0.8)
     rospy.sleep(2)
     copter.go_to_point(ungrab_points["ungrab_ungrab"], tolerance=0.19)
     rospy.sleep(2)
@@ -137,7 +137,7 @@ def ungrab():
     print("ungrab done")
 
 def mon1():
-    copter.go_to_point(monitoring_points["1"], yaw=math.radians(90))
+    copter.go_to_point(monitoring_points["1"], yaw=math.radians(0), speed=0.8)
     rospy.sleep(2)
     color_sub.color = "blue"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
@@ -145,7 +145,7 @@ def mon1():
     led.setPixelsColor(Utils.led_colors["none"])
 
 def mon2():
-    copter.go_to_point(monitoring_points["2"], yaw=math.radians(90))
+    copter.go_to_point(monitoring_points["2"], yaw=math.radians(0), speed=0.8)
     rospy.sleep(2)
     color_sub.color = "red"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
@@ -153,7 +153,7 @@ def mon2():
     led.setPixelsColor(Utils.led_colors["none"])
 
 def mon3():
-    copter.go_to_point(monitoring_points["3"], yaw=math.radians(270))
+    copter.go_to_point(monitoring_points["3"], yaw=math.radians(180), speed=0.8)
     rospy.sleep(2)
     color_sub.color = "yellow"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
@@ -161,7 +161,7 @@ def mon3():
     led.setPixelsColor(Utils.led_colors["none"])
 
 def mon4():
-    copter.go_to_point(monitoring_points["4"], yaw=math.radians(270))
+    copter.go_to_point(monitoring_points["4"], yaw=math.radians(180), speed=0.8)
     rospy.sleep(2)
     color_sub.color = "green"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
@@ -225,12 +225,11 @@ magnet.on()
 
 takeoff("down")
 stand("down")
-copter.go_to_point((2.38,0.69,1.2))
+# copter.go_to_point((2.38,0.69,1.2))
+ring()
+gate()
 grab()
 ungrab()
-
-# ring()
-# gate()
 # grab()
 
 # mon1()
