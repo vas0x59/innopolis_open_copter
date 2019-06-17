@@ -9,7 +9,8 @@ from Leds import Leds
 from rpi_ws281x import Color
 
 points = {
-    "takeoff":(2.3, 1.85, 0.8),
+    "takeoff_up":(2.3, 1.85, 1.8),
+    "takeoff_down":(2.3, 1.85, 0.6),
     # "ring":(2.8, 1.4, 0.5),
     # "gate":(1.9, 0.5, 0.5),
     "land": (0.355, 1.85, 1.3),
@@ -46,10 +47,10 @@ monitoring_points = {
     "4":(0.355, 1.75, 0.4),
 }
 stand_points = {
-    "stand_1_up_approach":(2, 1.85, 1.4),
-    "stand_1_down_approach":(2, 1.85, 0.4),
-    "stand_2_up_approach":(0.6, 1.85, 1.4),
-    "stand_2_down_approach":(0.6, 1.85, 0.4)
+    "stand_1_up_approach":(2.1, 1.60, 1.8),
+    "stand_1_down_approach":(2.1, 1.60, 0.5),
+    "stand_2_up_approach":(0.52, 1.60, 1.8),
+    "stand_2_down_approach":(0.52, 1.60, 0.5)
 }
 
 led = Leds(21)
@@ -73,7 +74,7 @@ def gate():
     copter.go_to_point(gate_points["gate_2"])
     print("gate done")
 
-def takeoff():
+def takeoff(p):
 
     led.setPixelsColor(Utils.led_colors["takeoff"])
     copter.takeoff(1)
@@ -82,7 +83,11 @@ def takeoff():
     print("takeoff compl")
     rospy.sleep(0.5)
     print("go to tk point")
-    copter.go_to_point(points["takeoff"])
+    if p == "up":
+        copter.go_to_point(points["takeoff_up"])
+    else p == "down":
+        copter.go_to_point(points["takeoff_down"])
+
     print("hold tk point")
     
     led.setPixelsColor(Utils.led_colors["wait"])
@@ -161,6 +166,7 @@ def mon4():
 def stand(p):
     speed = 0.8
     delay_time = 1
+    magnet.on()
     if p == "up":
         copter.go_to_point(stand_points["stand_1_up_approach"], tolerance=0.2, speed=speed)
         rospy.sleep(delay_time)
@@ -170,6 +176,7 @@ def stand(p):
         rospy.sleep(delay_time)
         copter.go_to_point(stand_points["stand_1_down_approach"], tolerance=0.2, speed=speed)
         rospy.sleep(delay_time)
+        magnet.off()
     elif p == "down":
         copter.go_to_point(stand_points["stand_1_down_approach"], tolerance=0.2, speed=speed)
         rospy.sleep(delay_time)
@@ -179,6 +186,7 @@ def stand(p):
         rospy.sleep(delay_time)
         copter.go_to_point(stand_points["stand_1_up_approach"], tolerance=0.2, speed=speed)
         rospy.sleep(delay_time)
+        magnet.off()
 
 # def mon(i):
 #     copter.go_to_point(monitoring_points[str(i)])
@@ -207,19 +215,23 @@ def grab():
 # ros_tools = Utils.RosTools()
 
 
-magnet.off()
+# magnet.off()
+magnet.on()
 
-takeoff()
-grab()
+takeoff("down")
+stand("down")
+ring()
+gate()
+# grab()
 
 # mon1()
-# ring()
+
 # mon2()
 # gate()
 # ungrab()
-mon3()
+# mon3()
 # mon4()
-magnet.off()
+# magnet.off()
 
 land()
 print("disarm")
