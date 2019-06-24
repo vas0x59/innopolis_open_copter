@@ -9,8 +9,9 @@ from Leds import Leds
 from rpi_ws281x import Color
 
 points = {
-    "takeoff_up":(0.13, 0.13, 2.0),
-    "takeoff_down":(0.13, 0.13, 2.0),
+    "takeoff_up":(0.143, 0.135, 2.0),
+    "takeoff_2":(0.143, 0.135, 2.88),
+    "takeoff_down":(0.143, 0.135, 2.0),
     # "ring":(2.8, 1.4, 0.5),
     # "gate":(1.9, 0.5, 0.5),
     "land": (2.9, 0.26, 2.0),
@@ -49,10 +50,24 @@ monitoring_points = {
     "4":(3, 2.0,  2.0)
 }
 stand_points = {
-    "stand_1_up_approach":(0.40, 0.30, 1.25),
-    "stand_1_down_approach":(0.40, 0.30, 2.67),
-    "stand_2_up_approach":(2.60, 0.30, 1.25),
-    "stand_2_down_approach":(2.60, 0.30, 2.67)
+    "stand_1_up_approach":(0.40, 0.28, 1.25),
+    "stand_1_down_approach":(0.40, 0.28, 2.67),
+    "stand_2_up_approach":(2.60, 0.28, 1.25),
+    "stand_2_down_approach":(2.60, 0.28, 2.67)
+}
+
+super_gate_points = {
+    "1": (0.9, 2.9, 2.64),
+    "2": (1.63, 2.9, 2.67),
+    "3": (1.83, 2.9, 1.6),
+    "4": (0.9, 2.9, 1.6)
+}
+
+super_ring_points = {
+    "1": (0.06, 1.88, 2.0),
+    "2": (0.06, 1.08, 2.0),
+    "3": (0.06, 1.08, 1.6),
+    "4": (0.06, 1.88, 1.6)
 }
 
 led = Leds(21)
@@ -62,7 +77,6 @@ magnet = Utils.Magnet()
 rospy.init_node("flight")
 
 color_sub = Utils.ColorReg()
-ir = Utils.IR()
 
 copter = Utils.Copter(markers_flipped=True)
 copter.start_coord = points["takeoff_down"]
@@ -99,18 +113,18 @@ def takeoff(p):
 
 def ring():
     print("going to ring_1")
-    copter.go_to_point(ring_points["ring_1"], speed=0.6)
+    copter.go_to_point(ring_points["ring_1"], speed=0.35)
     rospy.sleep(2)
     # print("going to ring")
-    # copter.go_to_point(ring_points["ring"], speed=0.6)
+    # copter.go_to_point(ring_points["ring"], speed=0.35)
     print("going to ring_2")
-    copter.go_to_point(ring_points["ring_2"], speed=0.6)
+    copter.go_to_point(ring_points["ring_2"], speed=0.35)
     rospy.sleep(2)
     print("ring done")
 
 def land():
     print("go to land")
-    copter.go_to_point(points["land"], tolerance=0.19, speed=0.6)
+    copter.go_to_point(points["land"], tolerance=0.19, speed=0.35)
     print("hold land")
     rospy.sleep(2)
 
@@ -123,7 +137,7 @@ def land():
 
 def ungrab():
     print("going to ungrab")
-    copter.go_to_point(ungrab_points["ungrab_hover"], tolerance=0.19, speed=0.6)
+    copter.go_to_point(ungrab_points["ungrab_hover"], tolerance=0.19, speed=0.35)
     rospy.sleep(2)
     copter.go_to_point(ungrab_points["ungrab_ungrab"], tolerance=0.19)
     rospy.sleep(0.5)
@@ -139,7 +153,7 @@ def ungrab():
     print("ungrab done")
 
 def mon1():
-    copter.go_to_point(monitoring_points["1"], speed=0.6)
+    copter.go_to_point(monitoring_points["1"], speed=0.35)
     rospy.sleep(1)
     color_sub.color = "red"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
@@ -147,7 +161,7 @@ def mon1():
     led.setPixelsColor(Utils.led_colors["none"])
 
 def mon2():
-    copter.go_to_point(monitoring_points["2"], speed=0.6)
+    copter.go_to_point(monitoring_points["2"], speed=0.35)
     rospy.sleep(1)
     color_sub.color = "green"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
@@ -155,7 +169,7 @@ def mon2():
     led.setPixelsColor(Utils.led_colors["none"])
 
 def mon3():
-    copter.go_to_point(monitoring_points["3"], speed=0.6)
+    copter.go_to_point(monitoring_points["3"], speed=0.35)
     rospy.sleep(1)
     color_sub.color = "yellow"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
@@ -163,7 +177,7 @@ def mon3():
     led.setPixelsColor(Utils.led_colors["none"])
 
 def mon4():
-    copter.go_to_point(monitoring_points["4"], speed=0.6)
+    copter.go_to_point(monitoring_points["4"], speed=0.35)
     rospy.sleep(1)
     color_sub.color = "blue"
     led.setPixelsColor(Utils.led_colors[color_sub.color])
@@ -208,37 +222,63 @@ def grab():
     print("magnet on")
     magnet.on()
     for i in range(3):
-        copter.go_to_point(grab_points["grab_grab"], tolerance=0.25, speed=0.6)
+        copter.go_to_point(grab_points["grab_grab"], tolerance=0.25, speed=0.35)
         rospy.sleep(1)
-        copter.go_to_point(grab_points["grab_hover"], tolerance=0.245, speed=0.6)
+        copter.go_to_point(grab_points["grab_hover"], tolerance=0.245, speed=0.35)
         rospy.sleep(0.5)
 
     # copter.takeoff(1.5)
     copter.go_to_point(grab_points["grab_hover"])
     print("grab done")
 
+def super_ring():
+    speed = 0.4
+    delay_time = 0.5
+    copter.go_to_point(super_ring_points["1"], tolerance=0.2, speed=speed)
+    rospy.sleep(delay_time)
+    copter.go_to_point(super_ring_points["2"], tolerance=0.2, speed=speed)
+    rospy.sleep(delay_time)
+    copter.go_to_point(super_ring_points["3"], tolerance=0.2, speed=speed)
+    rospy.sleep(delay_time)
+    copter.go_to_point(super_ring_points["4"], tolerance=0.2, speed=speed)
+    rospy.sleep(delay_time)
+    copter.go_to_point(super_ring_points["1"], tolerance=0.2, speed=speed)
 
+def super_gate():
+    speed = 0.4
+    delay_time = 0.5
+    copter.go_to_point(super_gate_points["1"], tolerance=0.2, speed=speed)
+    rospy.sleep(delay_time)
+    copter.go_to_point(super_gate_points["2"], tolerance=0.2, speed=speed)
+    rospy.sleep(delay_time)
+    copter.go_to_point(super_gate_points["3"], tolerance=0.2, speed=speed)
+    rospy.sleep(delay_time)
+    copter.go_to_point(super_gate_points["4"], tolerance=0.2, speed=speed)
+    rospy.sleep(delay_time)
+    copter.go_to_point(super_gate_points["1"], tolerance=0.2, speed=speed)
 
-# ros_tools = Utils.RosTools()
-
-
+# def
 
 
 # ros_tools = Utils.RosTools()
 
 
 # magnet.off()
-# magnet.on()
-# 
+magnet.on()
+
 takeoff("down")
-# mon1()
-# stand("down")
+mon1()
+stand("down")
 # copter.go_to_point((2.38,0.69,1.2))
-# ring()
+ring()
+
+copter.go_to_point((-0.04, 3.0, 2.43))
+rospy.sleep(2)
+
 # mon2()
-# gate()
-# mon4()
-# mon3()
+gate()
+mon4()
+mon3()
 # grab()
 # ungrab()
 # grab()
@@ -252,36 +292,7 @@ takeoff("down")
 # mon4()
 # magnet.off()
 
-
-tasks = {"land":land, "takeoff":takeoff, "ring":ring}
-# missions = {"b04f":["ring", ""]}
-desription = {"6897":"", "9867":"", "b04f":"", "30cf":"", "18e7":}
-ir_cmds = ["6897", "9867", "b04f", "30cf", "18e7"]
-
-ccc = ir.waitData(ir_cmds)
-if (ccc=="9867"):
-    stand("down")
-    ring()
-    gate()
-    land()
-    mon4()
-    # copter.land()
-    # copter.arming(False)
-    # magnet.off()
-# def super_copter():
-
-# while True:
-#     try:
-#         d = ir.waitData(ir_cmds)
-#         # ir_cmd = ir_cmds[d]
-#         mission = missions[d]
-#         print(mission)
-#         for i in mission:
-#             tasks[i]()
-#     except KeyboardInterrupt:
-#         break
-
-# land()
+land()
 print("disarm")
 copter.arming(False)
 magnet.off()

@@ -32,16 +32,17 @@ class Magnet:
         self.pi.write(self._pin, 0)
 
 class IR:
-    def __init__(self, topic="ir_reciv"):
+    def __init__(self, topic="/ir_reciv"):
         self.sub = rospy.Subscriber(topic, String, self._callback)
         self.data = "none"
     def _callback(self, msg):
         self.data = msg.data
-    def waitData(self):
+    def waitData(self, l):
+        print("wait")
         d = "none"
         while True:
             a = self.data
-            if a != "none":
+            if a != "none" and a in l:
                 d = a
                 break
         return d
@@ -90,16 +91,16 @@ class Copter:
         print("zero_z", self.zero_z)
         
 
-    def get_telemetry_aruco(self):
+    def get_telemetry_aruco(self, floor=False):
         telem =  self.get_telemetry(frame_id="aruco_map")
-        if self.markers_flipped == True:
+        if self.markers_flipped == True and floor==True:
             telem.z = self.zero_z - telem.z
             return telem
         else:
             return telem
 
-    def navigate_aruco(self, x=0, y=0, z=0, yaw=float('nan'), speed=0.5):
-        if self.markers_flipped == True:
+    def navigate_aruco(self, x=0, y=0, z=0, yaw=float('nan'), speed=0.35,  floor=False):
+        if self.markers_flipped == True and floor==True:
             return self.navigate(x=x, y=y, z=self.zero_z-z, yaw=yaw, speed=speed, frame_id='aruco_map')
         else:
             return self.navigate(x=x, y=y, z=z, yaw=yaw, speed=speed, frame_id='aruco_map')
@@ -108,12 +109,12 @@ class Copter:
         telem = self.get_telemetry_aruco()
         self.navigate(z=z, speed=0.56, frame_id="body", auto_arm=True)
         rospy.sleep(1.8)
-        self.navigate_aruco(x=telem.x, y=telem.y, z=z, speed=0.5)
+        self.navigate_aruco(x=telem.x, y=telem.y, z=z, speed=0.5, floor=True)
 
-    def go_to_point(self, point, yaw=float('nan'), speed=0.5, tolerance=0.218): #0.185
-        self.navigate_aruco(x=point[0], y=point[1], z=point[2], yaw=yaw, speed=speed)
+    def go_to_point(self, point, yaw=float('nan'), speed=0.4, tolerance=0.218, floor=False): #0.185
+        self.navigate_aruco(x=point[0], y=point[1], z=point[2], yaw=yaw, speed=speed,  floor=floor)
         while True:
-            telem = self.get_telemetry_aruco()
+            telem = self.get_telemetry_aruco(floor=floor)
             print(self.get_distance(point[0], point[1], point[2], telem.x, telem.y, telem.z))
             if self.get_distance(point[0], point[1], point[2], telem.x, telem.y, telem.z) < tolerance:
                 break

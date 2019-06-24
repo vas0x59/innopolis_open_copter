@@ -24,36 +24,24 @@ void setup()
     irrecv.enableIRIn(); // Start the receiver
     nh.initNode();
     nh.advertise(chatter);
-
 }
-int i_count = 0;
-bool qwe = false;
-String last_ir = "none";
+// int i_count = 0;
+// bool qwe = false;
+// String last_ir = "none";
 void loop()
 {
     if (irrecv.decode(&results))
     {
 
         String str = String((int)results.value, HEX);
-        str_msg.data = str.c_str();
-        chatter.publish(&str_msg);
-        last_ir = str;
-        irrecv.resume();
-        qwe = true;
-        i_count = 0;
-    }
-    else if (qwe)
-    {
-        // if (i_count < 1)
+        // if (str != "ffff")
         // {
-        //     str_msg.data = last_ir.c_str();
-        //     chatter.publish(&str_msg);
-        //     i_count++;
-        // }
-        // else
-        // {
-        //     qwe = false;
-        //     i_count = 0;
+            str_msg.data = str.c_str();
+            chatter.publish(&str_msg);
+            // last_ir = str;
+            irrecv.resume();
+            // qwe = true;
+            // i_count = 0;
         // }
     }
     else
@@ -62,5 +50,5 @@ void loop()
         chatter.publish(&str_msg);
     }
     nh.spinOnce();
-    delay(300);
+    delay(100);
 }
