@@ -1,4 +1,4 @@
-# Innpolis Open 2019
+# Innopolis Open 2019
 
 Team **DVG_DroneLab** - the **1st** place
 
